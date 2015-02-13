@@ -11,6 +11,42 @@ if (!$mysqli || $mysqli->connect_errno){
 
 }
 
+
+if (isset($_POST['action']) && $_POST['action'] == 'delete'){
+
+		$stmt = $mysqli->prepare("DELETE FROM VideoInventory WHERE name LIKE ?");
+
+	if(!$stmt){
+
+		echo "error on stmt";
+
+	}
+
+	$stmt->bind_param("s", $_POST['n']);	
+
+	$stmt->execute();
+
+	$stmt->close();
+}
+
+
+if (isset($_POST['action']) && $_POST['action'] == 'check'){
+
+		$stmt = $mysqli->prepare("UPDATE VideoInventory SET rented = !rented WHERE name LIKE ?");
+
+	if(!$stmt){
+
+		echo "error on stmt";
+
+	}
+
+	$stmt->bind_param("s", $_POST['n']);	
+
+	$stmt->execute();
+
+	$stmt->close();
+}
+
 if (isset($_GET['name'])){
 
 	$name = $_GET['name'];
@@ -35,7 +71,12 @@ if (isset($_GET['name'])){
 
 	$stmt->close();
 
+	$redirect = "http://web.engr.oregonstate.edu/~jurczakn/videoInventory.html";
+
+	header("Location:{$redirect}", false);
+
 }
+
 
 $stmt = $mysqli->prepare("SELECT * FROM VideoInventory");
 
@@ -49,23 +90,15 @@ $stmt->execute();
 
 $stmt->bind_result($id, $name, $category, $length, $rented);
 
+$results = array();
+
 while ($stmt->fetch()){
 
-//	echo " $id $name $category $length ";
-
-//	if ($rented)
-
-//		echo "Checked Out";
-
-//	else 
-
-//		echo "available";
+	$results[] = array('id' => $id, 'name' => $name, 'category' => $category, 'length' => $length, 'rented' => $rented);
 
 }
 
-$redirect = "http://web.engr.oregonstate.edu/~jurczakn/videoInventory.html";
-
-header("Location:{$redirect}", false);
+echo json_encode($results);
 
 
 ?>
