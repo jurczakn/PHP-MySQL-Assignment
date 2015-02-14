@@ -135,7 +135,10 @@ function videoTable (vidList) {
 
 					console.log(results);
 
-					videoTable(results);
+					videoTable(results.results);
+
+					genreList(results.genres);
+
 
 				}
 
@@ -174,7 +177,10 @@ function videoTable (vidList) {
 
 					console.log(results);
 
-					videoTable(results);
+					videoTable(results.results);
+
+					genreList(results.genres);
+
 
 				}
 
@@ -193,6 +199,127 @@ function videoTable (vidList) {
 
 
 	}
+};
+
+function genreList(results){
+
+	var g = document.getElementById("genres");
+
+	while (g.firstChild){
+
+		g.removeChild(g.firstChild);
+	}
+
+
+	var all = document.createElement("option");
+
+	all.value = "%";
+
+	all.textContent = "All Videos";
+
+	g.appendChild(all);
+
+	for (var i = 0; i < results.length; i++){
+
+		var genreSelect = document.createElement("option");
+
+		genreSelect.value = results[i];
+
+		genreSelect.textContent = results[i];
+
+		g.appendChild(genreSelect);
+	
+	}
+
+	var filterBut = document.getElementById("filter");
+
+	filterBut.textContent = "FILTER";
+
+	filterBut.addEventListener('click', function(){
+
+			var reg = new XMLHttpRequest();
+
+			if(!reg){
+
+				throw 'Unable to create HttpRequest.';
+
+			}
+
+			var vars;
+			
+			vars = "genre="+g.value;
+
+			reg.onreadystatechange = function(){
+
+				if(this.readyState === 4){
+
+					var results = JSON.parse(this.responseText);
+
+					console.log(results);
+
+					videoTable(results.results);
+
+					genreList(results.genres);
+
+				}
+
+			};
+
+			var url = 'http://web.engr.oregonstate.edu/~jurczakn/videoInventory.php';
+
+			reg.open('POST', url);
+
+			reg.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+
+			reg.send(vars);
+
+
+
+	});
+
+
+	
+};
+
+function deleteAll(){
+
+	var reg = new XMLHttpRequest();
+
+	if(!reg){
+
+		throw 'Unable to create HttpRequest.';
+
+	}
+
+	var vars;
+			
+	vars = "action=deleteall";
+
+	reg.onreadystatechange = function(){
+
+		if(this.readyState === 4){
+
+			var results = JSON.parse(this.responseText);
+
+			console.log(results);
+
+			videoTable(results.results);
+
+			genreList(results.genres);
+
+
+		}
+
+	};
+
+	var url = 'http://web.engr.oregonstate.edu/~jurczakn/videoInventory.php';
+
+	reg.open('POST', url);
+
+	reg.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+
+	reg.send(vars);
+
 };
 
 window.onload = function () {
@@ -219,7 +346,9 @@ window.onload = function () {
 
 			console.log(results);
 
-			videoTable(results);
+			videoTable(results.results);
+
+			genreList(results.genres);
 
 		}
 

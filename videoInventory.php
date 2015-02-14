@@ -47,6 +47,22 @@ if (isset($_POST['action']) && $_POST['action'] == 'check'){
 	$stmt->close();
 }
 
+if (isset($_POST['action']) && $_POST['action'] == 'deleteall'){
+
+		$stmt = $mysqli->prepare("DELETE FROM VideoInventory");
+
+	if(!$stmt){
+
+		echo "error on stmt";
+
+	}	
+
+	$stmt->execute();
+
+	$stmt->close();
+}
+
+
 if (isset($_GET['name'])){
 
 	$name = $_GET['name'];
@@ -78,13 +94,23 @@ if (isset($_GET['name'])){
 }
 
 
-$stmt = $mysqli->prepare("SELECT * FROM VideoInventory");
+$stmt = $mysqli->prepare("SELECT * FROM VideoInventory Where category LIKE ?");
 
 if(!$stmt){
 
 	echo "error on stmt";
 
 }
+
+$filter = "%";
+
+if(isset($_POST['genre'])){
+
+	$filter = $_POST['genre'];
+
+}
+
+$stmt->bind_param("s", $filter);
 
 $stmt->execute();
 
@@ -98,7 +124,37 @@ while ($stmt->fetch()){
 
 }
 
-echo json_encode($results);
+$stmt->close();
+
+$stmt = $mysqli->prepare("SELECT DISTINCT category FROM VideoInventory");
+
+if(!$stmt){
+
+	echo "error on stmt";
+
+}
+
+$stmt->execute();
+
+$stmt->bind_result($genre);
+
+$genres = array();
+
+while ($stmt->fetch()){
+
+	array_push($genres, $genre);
+
+}
+
+$full = array(
+
+	'results' => $results,
+
+	'genres' => $genres
+
+);
+
+echo json_encode($full);
 
 
 ?>
