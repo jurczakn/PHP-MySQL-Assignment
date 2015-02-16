@@ -1,0 +1,22 @@
+Start: Wed, 11 Feb 2015 03:25:33 -0600
+End: Wed, 11 Feb 2015 03:30:33 -0600
+Tasks: create files
+
+Start: Wed, 11 Feb 2015 21:45:00 -0600
+End: Thu, 12 Feb 2015 04:40:48 -0600
+Tasks: Add video works
+
+Start: Thu, 12 Feb 2015 21:30:00 -0600
+End: Fri, 13 Feb 2015 04:47:18 -0600
+Tasks: Print table, remove and check in buttons
+
+Start: Fri, 13 Feb 2015 21:00:00 -0600
+End: Sat, 14 Feb 2015 02:34:04 -0600
+Tasks: Finished everything but error checking for add video
+
+Start: Sun, 15 Feb 2015 21:00:00 -0600
+End: Sun, 15 Feb 2015 22:12:59 -0600
+Tasks: error checking done
+
+
+
